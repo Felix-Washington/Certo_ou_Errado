@@ -8,6 +8,18 @@ class Tela:
         pygame.display.set_icon(icon)
         self.__screen = pygame.display.set_mode((800, 600))
 
-    def mostra_imagem(self, caminho, x, y):
-        img = pygame.image.load(caminho)
-        self.__screen.blit(img, (x, y))
+    def mostra_imagem(self, caminho, tuplas):
+        pasta = 'imagens/'
+        img = pygame.image.load(pasta + caminho + '.png')
+        self.__screen.blit(img, tuplas)
+
+    def redimensionar_imagem(self, objeto):
+        pasta = 'imagens/'
+        img = pygame.image.load(pasta + objeto.imagem + '.png')
+        print(objeto.tamanho)
+        pygame.transform.scale(img, [300, 300])
+        self.__screen.blit(img, objeto.posicao)
+
+    @property
+    def screen(self):
+        return self.__screen

@@ -2,6 +2,7 @@ from pygame import QUIT
 
 from controladores.AbstractControlador import AbstractControlador
 from visao.Tela import Tela
+from modelo.Menu import Menu
 import pygame
 import sys
 from pygame.locals import *
@@ -10,76 +11,88 @@ from pygame.locals import *
 class ControladorMenu(AbstractControlador):
     def __init__(self):
         super().__init__()
+
         self.__tela = Tela()
-        self.__ponteiro_x = 200
-        self.__ponteiro_y = 100
+        self.__posicao_ponteiro = [200, 100]
         self.__ponteiro_max = 575
-        self.__menu_imagem = 'imagens/menu.png'
-        self.__creditos_imagem = 'imagens/tela_creditos.png'
-        self.__opcoes_imagem = 'imagens/tela_opcoes.png'
-        self.__ponteiro_imagem = 'imagens/ufo.png'
+        self.__ponteiro_imagem = 'ufo.png'
         self.__controle_menu = 0
+        self.__posicao_mouse = pygame.mouse.get_pos()
+        self.__menus = {}
+        self.__rects = {}
+        self.criar_menus()
+        self.__menu_selecionado = 0
+
+    def criar_menus(self):
+        caminho = 'menus/'
+        imagens = {0: caminho + 'menu', 1: caminho + 'creditos', 2: caminho + 'opcoes', 3: 'ufo'}
+        rect_pos = [240, 80]
+        rect_tam = [343, 79]
+
+        for i in range(4):
+            self.__menus[i] = Menu(imagens[i])
+            self.__rects[i] = pygame.Rect([rect_pos[0], rect_pos[1]], [rect_tam[0], rect_tam[1]])
+
+            rect_pos[1] += 25 + rect_tam[1]
 
     def menu_opcoes(self):
 
         while self.__controle_menu >= 0:
-            self.teclado()
+            self.checar_evento()
 
-            if self.__ponteiro_y > self.__ponteiro_max:
-                self.__ponteiro_y = 100
-            elif self.__ponteiro_y < 100:
-                self.__ponteiro_y = self.__ponteiro_max - 100
+            if self.__controle_menu == 1:
+                print("tes")
+                self.opcoes()
 
-            if self.__controle_menu == 0:
-                self.__tela.mostra_imagem(self.__menu_imagem, 0, 0)
-                self.__tela.mostra_imagem(self.__ponteiro_imagem, self.__ponteiro_x, self.__ponteiro_y)
-
-            elif self.__controle_menu == 1:
-                self.creditos()
-                self.__tela.mostra_imagem(self.__creditos_imagem, 0, 0)
-
-            elif self.__controle_menu == 2:
-                self.__tela.mostra_imagem(self.__opcoes_imagem, 0, 0)
-
+            self.desenhar()
             pygame.display.update()
 
-    def teclado(self):
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
+    def checar_evento(self):
+        for evento in pygame.event.get():
+            self.teclado(evento)
+            self.mouse(evento)
 
-            elif event.type == KEYDOWN:
-                if event.key == K_DOWN:
-                    self.__ponteiro_y += 125
-                elif event.key == K_UP:
-                    self.__ponteiro_y -= 125
+    def desenhar(self):
+        self.__tela.mostra_imagem(self.__menus[self.__menu_selecionado].imagem, [0, 0])
 
-                elif event.key == K_SPACE:
-                    if self.__ponteiro_y == 100:
-                        self.__controle_menu = -1
-                    elif self.__ponteiro_y == 225:
-                        self.__controle_menu = 1
-                    elif self.__ponteiro_y == 350:
-                        self.__controle_menu = 2
-                    elif self.__ponteiro_y == 475:
-                        self.__controle_menu = -2
-
-                elif event.key == K_ESCAPE:
-                    if self.__controle_menu == 1 or self.__controle_menu == 2:
-                        self.__controle_menu = 0
-
-    def creditos(self):
+    def opcoes(self):
         pass
 
+    def teclado(self, evento):
+        if evento.type == QUIT:
+            pygame.quit()
+            sys.exit()
+
+        elif evento.type == KEYDOWN:
+            if evento.key == K_ESCAPE:
+                self.__menu_selecionado = 0
+                if self.__controle_menu == 1 or self.__controle_menu == 2:
+                    self.__controle_menu = 0
+
+    def mouse(self, evento):
+        self.__posicao_mouse = pygame.mouse.get_pos()
+        if evento.type == MOUSEBUTTONDOWN:
+
+            if self.__controle_menu == 0:
+                for c, rect in self.__rects.items():
+                    if rect.collidepoint(self.__posicao_mouse):
+                        if c == 0:
+                            self.__controle_menu = -1
+                        elif c == 3:
+                            self.__controle_menu = -2
+                        elif c == 1:
+                            self.__controle_menu = 1
+                        elif c == 2:
+                            # self.__controle_menu = 2
+                            pass
+                            # self.__menu_selecionado = c
+            elif self.__controle_menu > 0:
+                pass
+
     def adiciona(self, dados):
-        return 0
         pass
 
     def remover(self, dados):
-        pass
-
-    def atualiza(self, dados):
         pass
 
     @property
