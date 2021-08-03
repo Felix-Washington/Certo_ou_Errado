@@ -47,6 +47,8 @@ class ControladorTabuleiro(AbstractControlador):
         if carta_atual is not None:
             self.__tela.mostra_imagem(carta_atual.imagem, carta_atual.posicao)
 
+            self.__controlador_principal.controlador_cartas.mostrar_opcoes()
+
         pygame.display.update()
 
     def checar_evento(self):
@@ -60,7 +62,7 @@ class ControladorTabuleiro(AbstractControlador):
                 if self.__controlador_principal.controlador_cartas.ultima_carta_baralho.rect.collidepoint(
                         self.__posicao_mouse):
                     self.retirar_carta()
-
+                    # self.__controlador_principal.controlador_cartas.mostrar_opcoes()
             if self.__dado.rect.collidepoint(self.__posicao_mouse):
                 self.__dado.rodar_dado()
 

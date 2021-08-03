@@ -43,3 +43,11 @@ class Carta:
     @tamanho.setter
     def tamanho(self, tamanho):
         self.__tamanho = tamanho
+
+    @property
+    def perguntas(self):
+        return self.__perguntas
+
+    @perguntas.setter
+    def perguntas(self, perguntas):
+        self.__perguntas = perguntas

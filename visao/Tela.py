@@ -13,6 +13,9 @@ class Tela:
         img = pygame.image.load(pasta + caminho + '.png')
         self.__screen.blit(img, tuplas)
 
+    def texto(self, img, pos):
+        self.__screen.blit(img, pos)
+
     def redimensionar_imagem(self, objeto):
         pasta = 'imagens/'
         img = pygame.image.load(pasta + objeto.imagem + '.png')
