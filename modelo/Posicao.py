@@ -25,3 +25,4 @@ class Posicao:
     @property
     def rect(self):
         return self.__rect
+

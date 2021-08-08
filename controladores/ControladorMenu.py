@@ -36,7 +36,6 @@ class ControladorMenu(AbstractControlador):
             rect_pos[1] += 25 + rect_tam[1]
 
     def menu_opcoes(self):
-
         while self.__controle_menu >= 0:
             self.checar_evento()
 

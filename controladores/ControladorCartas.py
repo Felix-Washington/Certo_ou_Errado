@@ -14,7 +14,6 @@ class ControladorCartas:
         self.__perguntas = self.pool_de_perguntas()
         self.__carta_atual = None
         self.criar_cartas()
-        self.__ultima_carta_baralho = self.__baralho[-1]
         pygame.font.init()
         self.__myfont = pygame.font.SysFont(None, 30)
 
@@ -25,23 +24,24 @@ class ControladorCartas:
         self.__ultima_carta_baralho = self.__baralho[-1]
 
     def virar_carta(self):
-        self.__carta_atual = self.__baralho[-1]
-        self.definir_perguntas()
-        self.__carta_atual.imagem = 'carta_cima'
+        if self.__numero_cartas_total > 0:
+            self.__carta_atual = self.__baralho[-1]
+            self.definir_perguntas()
+            self.__carta_atual.imagem = 'carta_cima'
 
-        self.__carta_atual.tamanho = [240, 320]
-        self.__carta_atual.posicao = [int(400 - (self.__carta_atual.tamanho[0] / 2)),
-                                      600 - self.__carta_atual.tamanho[1]]
+            self.__carta_atual.tamanho = [240, 320]
+            self.__carta_atual.posicao = [int(400 - (self.__carta_atual.tamanho[0] / 2)),
+                                          600 - self.__carta_atual.tamanho[1]]
 
-        self.__carta_atual.rect = [self.__carta_atual.posicao]
-        del self.__baralho[-1]
+            self.__carta_atual.rect = [self.__carta_atual.posicao]
+            del self.__baralho[-1]
 
-        self.__numero_cartas_total -= 1
+            self.__numero_cartas_total -= 1
 
-        if self.__numero_cartas_total == 0:
-            self.__ultima_carta_baralho = self.__baralho
-        else:
-            self.__ultima_carta_baralho = self.__baralho[-1]
+            if self.__numero_cartas_total == 0:
+                self.__ultima_carta_baralho = self.__baralho
+            else:
+                self.__ultima_carta_baralho = self.__baralho[-1]
 
     def definir_perguntas(self):
         i = 0
